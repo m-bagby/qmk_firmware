@@ -44,6 +44,16 @@ HSV SOLID_SPLASH_math(HSV hsv, int16_t dx, int16_t dy, uint8_t dist, uint16_t ti
     if (effect > 255) effect = 255;
 
 
+    //Get percent (0 - 1) of effect strength
+    //effect 0 - 255 -> strength 0 - 1
+    double strength = 0;
+    normalStrength = qadd8(0, 255 - effect);
+    if (normalStrength != 0) {
+        strength = normalStrength / 255;
+    }
+    double strength = effect/255;
+
+
     //Set color
     //keys that have been pressed get offset towards the secondary color
     //subtracting the offset channel value blueshifts the hue of secondary color
@@ -53,29 +63,26 @@ HSV SOLID_SPLASH_math(HSV hsv, int16_t dx, int16_t dy, uint8_t dist, uint16_t ti
     //We want maximum change to be hueShift and minimum change to be zero
     //Positive hue shift to secondary color
     if (hueShift > 0) {
-    hsv.h += MAX(MIN(hueShift + (255 - effect), (uint8_t)hueShift), 0);
-    //     hsv.h += qadd8((uint8_t)hueShift, effect);
+         hsv.h += (strength * hueShift);
     }
     //Negative hue shift to secondary color
     else {
     hueShift *= -1;
-    hsv.h -= MAX(MIN(hueShift + (255 - effect), (uint8_t)hueShift), 0);
-    //     hsv.h -= qadd8((uint8_t)hueShift, effect);
+         hsv.h -= (strength * hueShift);
     }
-    //hsv.h += qsub8(MIN(255 - effect), (uint8_t)hueShift);
 
     //Set brightness
     //I want a lower background brightness with pressed keys starting at secondary color bright
-        //then dimming with their hue shift back to the background brightness
-//         uint8_t brightness = (uint8_t)(minBrightness); //background 1/3rd of highlight
+    //then dimming with their hue shift back to the background brightness
+    uint8_t brightness = (uint8_t)(minBrightness); //background 1/3rd of highlight
 
-//         brightness += qadd8((brightness * 2), effect);
-//         hsv.v = brightness;
+    brightness += (strength * (brightness * 2));
+    hsv.v = brightness;
+
+
+    return hsv;
 
     //hsv.v = qadd8(hsv.v, 255 - effect); ORIGINAL
-    hsv.v = MAX(qadd8(hsv.v, 255 - effect), minBrightness); //this is where v (brightness) is set from 0 to 255..aka key is off, full, or fading
-    //if brightness full it's qadd8 255, 255-effect
-    return hsv;
 }
 
 
