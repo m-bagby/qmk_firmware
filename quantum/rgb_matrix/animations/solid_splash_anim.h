@@ -47,11 +47,10 @@ HSV SOLID_SPLASH_math(HSV hsv, int16_t dx, int16_t dy, uint8_t dist, uint16_t ti
     //Get percent (0 - 1) of effect strength
     //effect 0 - 255 -> strength 0 - 1
     double strength = 0;
-    normalStrength = qadd8(0, 255 - effect);
+    double normalStrength = qadd8(0, 255 - effect);
     if (normalStrength != 0) {
         strength = normalStrength / 255;
     }
-    double strength = effect/255;
 
 
     //Set color
