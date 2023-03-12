@@ -4,10 +4,11 @@ RGB_MATRIX_EFFECT(SOLID_REACTIVE)
 #        ifdef RGB_MATRIX_CUSTOM_EFFECT_IMPLS
 
 static HSV SOLID_REACTIVE_math(HSV hsv, uint16_t offset) {
-//     hsv.h += qsub8(130, offset);
-
-    //using saturation setting to control secondary color and then setting all color's saturation back to full
+    uint8_t minBrightness = hsv.v; //Minimum brightness (background brightness) is the brightness setting
+    uint8_t maxBrightness = 255; //Max brightness hardcoded to full 255
     int primaryHue = (int)hsv.h; //Primary color is color setting
+    //using saturation setting to control secondary color and then setting all color's saturation back to full
+
     if (hsv.s == 0) {
         hsv.s = 1;
     }
@@ -45,9 +46,9 @@ static HSV SOLID_REACTIVE_math(HSV hsv, uint16_t offset) {
 
     //I want a lower background brightness with pressed keys starting at secondary color bright
     //then dimming with their hue shift back to the background brightness
-    uint8_t brightness = (uint8_t)(hsv.v / 3); //background 1/3rd of highlight
+    uint8_t brightness = (uint8_t)(minBrightness); //background 1/3rd of highlight
 
-    brightness += qsub8((brightness * 2), offset);
+    brightness += qsub8((maxBrightness - minBrightness), offset);
     hsv.v = brightness;
 
 //OLD NOTES: This was implemented
