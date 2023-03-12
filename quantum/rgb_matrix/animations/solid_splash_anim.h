@@ -16,8 +16,10 @@ RGB_MATRIX_EFFECT(SOLID_MULTISPLASH)
 
 
 HSV SOLID_SPLASH_math(HSV hsv, int16_t dx, int16_t dy, uint8_t dist, uint16_t tick) {
-    //using saturation setting to control secondary color and then setting all color's saturation back to full
     int primaryHue = (int)hsv.h; //Primary color is color setting
+    uint8_t minBrightness = hsv.v; //Minimum brightness (background brightness) is the brightness setting
+    uint8_t maxBrightness = 255; //Max brightness hardcoded to full 255
+    //using saturation setting to control secondary color and then setting all color's saturation back to full
     if (hsv.s == 0) {
         hsv.s = 1;
     }
@@ -25,7 +27,6 @@ HSV SOLID_SPLASH_math(HSV hsv, int16_t dx, int16_t dy, uint8_t dist, uint16_t ti
 
     int hueDifference = primaryHue - secondaryHue;
     int hueShift;
-    uint8_t minBrightness = hsv.v / 3;
 
     if (hueDifference < 128 && hueDifference > -128) {
       hueShift = - hueDifference;
@@ -73,9 +74,8 @@ HSV SOLID_SPLASH_math(HSV hsv, int16_t dx, int16_t dy, uint8_t dist, uint16_t ti
     //Set brightness
     //I want a lower background brightness with pressed keys starting at secondary color bright
     //then dimming with their hue shift back to the background brightness
-    uint8_t brightness = (uint8_t)(minBrightness); //background 1/3rd of highlight
-
-    brightness += (strength * (brightness * 2));
+    uint8_t brightness = (uint8_t)(minBrightness);
+    brightness += (strength * (maxBrightness - minBrightness));
     hsv.v = brightness;
 
 
