@@ -11,12 +11,76 @@ RGB_MATRIX_EFFECT(SOLID_MULTISPLASH)
 
 #        ifdef RGB_MATRIX_CUSTOM_EFFECT_IMPLS
 
+
+
+
+
 HSV SOLID_SPLASH_math(HSV hsv, int16_t dx, int16_t dy, uint8_t dist, uint16_t tick) {
+    //using saturation setting to control secondary color and then setting all color's saturation back to full
+    int primaryHue = (int)hsv.h; //Primary color is color setting
+    if (hsv.s == 0) {
+        hsv.s = 1;
+    }
+    int secondaryHue = (int)hsv.s; //Secondary color is saturation setting
+
+    int hueDifference = primaryHue - secondaryHue;
+    int hueShift;
+    uint8_t minBrightness = hsv.v / 3;
+
+    if (hueDifference < 128 && hueDifference > -128) {
+      hueShift = - hueDifference;
+    }
+    else if (hueDifference > 0) {
+      hueShift = 255 - hueDifference;
+    }
+    else {
+      hueShift = -(255 + hueDifference);
+    }
+    hsv.s = 255;
+
+
+    //Set effect (default code);
     uint16_t effect = tick - dist;
     if (effect > 255) effect = 255;
-    hsv.v = qadd8(hsv.v, 255 - effect);
+
+
+    //Set color
+    //keys that have been pressed get offset towards the secondary color
+    //subtracting the offset channel value blueshifts the hue of secondary color
+    //I want the hueshift direction (+=, -=) to go towards the closest. (teal -> purple) (purple <- teal)
+    //To do this, I need to assign color hue and find which direction is closer..
+
+    //We want maximum change to be hueShift and minimum change to be zero
+    //Positive hue shift to secondary color
+    if (hueShift > 0) {
+    hsv.h += MAX(MIN(hueShift + (255 - effect), (uint8_t)hueShift), 0);
+    //     hsv.h += qadd8((uint8_t)hueShift, effect);
+    }
+    //Negative hue shift to secondary color
+    else {
+    hueShift *= -1;
+    hsv.h -= MAX(MIN(hueShift + (255 - effect), (uint8_t)hueShift), 0);
+    //     hsv.h -= qadd8((uint8_t)hueShift, effect);
+    }
+    //hsv.h += qsub8(MIN(255 - effect), (uint8_t)hueShift);
+
+    //Set brightness
+    //I want a lower background brightness with pressed keys starting at secondary color bright
+        //then dimming with their hue shift back to the background brightness
+//         uint8_t brightness = (uint8_t)(minBrightness); //background 1/3rd of highlight
+
+//         brightness += qadd8((brightness * 2), effect);
+//         hsv.v = brightness;
+
+    //hsv.v = qadd8(hsv.v, 255 - effect); ORIGINAL
+    hsv.v = MAX(qadd8(hsv.v, 255 - effect), minBrightness); //this is where v (brightness) is set from 0 to 255..aka key is off, full, or fading
+    //if brightness full it's qadd8 255, 255-effect
     return hsv;
 }
+
+
+
+
 
 #            ifdef ENABLE_RGB_MATRIX_SOLID_SPLASH
 bool SOLID_SPLASH(effect_params_t* params) {
