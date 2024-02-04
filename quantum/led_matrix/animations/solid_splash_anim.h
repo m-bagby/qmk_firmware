@@ -11,11 +11,37 @@ LED_MATRIX_EFFECT(SOLID_MULTISPLASH)
 
 #        ifdef LED_MATRIX_CUSTOM_EFFECT_IMPLS
 
+
+
+//Have a static lower brightness background, with bright splashes from keypresses returning to background
 uint8_t SOLID_SPLASH_math(uint8_t val, int16_t dx, int16_t dy, uint8_t dist, uint16_t tick) {
+    uint8_t maxBrightness = (uint8_t) val * 2;
+    uint8_t minBrightness = val;
+
     uint16_t effect = tick - dist;
     if (effect > 255) effect = 255;
-    return qadd8(val, 255 - effect);
+
+    //Get percent (0 - 1) of effect strength
+    //effect 0 - 255 -> strength 0 - 1
+    double strength = 0;
+    double normalStrength = qadd8(0, 255 - effect);
+    if (normalStrength != 0) {
+        strength = normalStrength / 255;
+    }
+
+    //Set brightness
+    //bright splashes from keypresses returning to background
+    uint8_t brightness = minBrightness;
+    brightness += (strength * (maxBrightness - minBrightness));
+    val = brightness;
+
+    return val;
+
+    //return qadd8(val, 255 - effect); (original code)
 }
+
+
+
 
 #            ifdef ENABLE_LED_MATRIX_SOLID_SPLASH
 bool SOLID_SPLASH(effect_params_t* params) {
