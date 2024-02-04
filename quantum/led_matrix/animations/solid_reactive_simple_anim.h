@@ -4,7 +4,16 @@ LED_MATRIX_EFFECT(SOLID_REACTIVE_SIMPLE)
 #        ifdef LED_MATRIX_CUSTOM_EFFECT_IMPLS
 
 static uint8_t SOLID_REACTIVE_SIMPLE_math(uint8_t val, uint16_t offset) {
-    return scale8(255 - offset, val);
+    //return scale8(255 - offset, val); ORIGINAL
+
+    uint8_t maxBrightness = val;
+    uint8_t minBrightness = (uint8_t) (val / 2); //background 1/2 of highlight
+
+    uint8_t brightness = (uint8_t)(minBrightness);
+    brightness += qsub8((maxBrightness - minBrightness), offset);
+    val = brightness;
+
+    return val;
 }
 
 bool SOLID_REACTIVE_SIMPLE(effect_params_t* params) {
