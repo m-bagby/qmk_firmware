@@ -20,15 +20,9 @@
 /* LED Matrix Driver Configuration */
 #    define DRIVER_COUNT 1
 #    define DRIVER_ADDR_1 0b1110100
-#    define DRIVER_1_LED_TOTAL 87
-#    define LED_MATRIX_LED_COUNT DRIVER_1_LED_TOTAL
 
-/* Increase I2C speed to 1000 KHz */
-#    define I2C1_TIMINGR_PRESC 0U
-#    define I2C1_TIMINGR_SCLDEL 3U
-#    define I2C1_TIMINGR_SDADEL 0U
-#    define I2C1_TIMINGR_SCLH 15U
-#    define I2C1_TIMINGR_SCLL 30U
+/* LED Matrix Configuration */
+#    define LED_MATRIX_LED_COUNT 87
 
 /* Set to infinit, which is use in USB mode by default */
 #    define LED_MATRIX_TIMEOUT LED_MATRIX_TIMEOUT_INFINITE
@@ -44,34 +38,7 @@
 // LED Matrix Animation modes. Explicitly enabled
 // For full list of effects, see:
 // https://docs.qmk.fm/#/feature_led_matrix?id=led-matrix-effects
-
 #    define LED_MATRIX_KEYPRESSES
-
-#    define ENABLE_LED_MATRIX_NONE
-#    define ENABLE_LED_MATRIX_SOLID
-// #define ENABLE_LED_MATRIX_ALPHAS_MODS
-#    define ENABLE_LED_MATRIX_BREATHING
-// #define ENABLE_LED_MATRIX_BAND
-#    define ENABLE_LED_MATRIX_BAND_PINWHEEL
-#    define ENABLE_LED_MATRIX_BAND_SPIRAL
-#    define ENABLE_LED_MATRIX_CYCLE_LEFT_RIGHT
-#    define ENABLE_LED_MATRIX_CYCLE_UP_DOWN
-#    define ENABLE_LED_MATRIX_CYCLE_OUT_IN
-#    define ENABLE_LED_MATRIX_DUAL_BEACON
-
-#    define ENABLE_LED_MATRIX_SOLID_REACTIVE_SIMPLE
-// #define ENABLE_LED_MATRIX_SOLID_REACTIVE_WIDE
-#    define ENABLE_LED_MATRIX_SOLID_REACTIVE_MULTIWIDE
-// #define ENABLE_LED_MATRIX_SOLID_REACTIVE_CROSS
-// #define ENABLE_LED_MATRIX_SOLID_REACTIVE_MULTICROSS
-// #define ENABLE_LED_MATRIX_SOLID_REACTIVE_NEXUS
-#    define ENABLE_LED_MATRIX_SOLID_REACTIVE_MULTINEXUS
-#    define ENABLE_LED_MATRIX_SOLID_SPLASH
-// #define ENABLE_LED_MATRIX_SOLID_MULTISPLASH
-
-#    define ENABLE_LED_MATRIX_WAVE_LEFT_RIGHT
-#    define ENABLE_LED_MATRIX_WAVE_UP_DOWN
-#    define ENABLE_LED_MATRIX_EFFECT_MAX
 
 /* Use first 6 channels of LED driver */
 #    define PHASE_CHANNEL MSKPHASE_6CHANNEL

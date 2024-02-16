@@ -403,7 +403,7 @@ void indicator_battery_low_backlit_enable(bool enable) {
         }
         /* Indicating at first time or after the interval */
         if ((rtc_time == 0 || t - rtc_time > LOW_BAT_LED_TRIG_INTERVAL) && bat_low_ind_state == 0) {
-            bat_low_backlit_indicator = enable ? (timer_read32() | 1) : 0;
+            bat_low_backlit_indicator = enable ? (timer_read32() == 0 ? 1 : timer_read32()) : 0;
             rtc_time                  = rtc_timer_read_ms();
             bat_low_ind_state         = 1;
 
@@ -448,7 +448,7 @@ void indicator_battery_low(void) {
                 bat_low_ind_state |= 0x80;
             }
 
-            bat_low_backlit_indicator = sync_timer_read32() | 1;
+            bat_low_backlit_indicator = sync_timer_read32() == 0 ? 1 : sync_timer_read32();
 
             /*  Restore backligth state */
             if ((bat_low_ind_state & 0x0F) > (LOW_BAT_LED_BLINK_TIMES)) {
@@ -476,7 +476,7 @@ void indicator_task(void) {
 }
 
 #if defined(LED_MATRIX_ENABLE) || defined(RGB_MATRIX_ENABLE)
-static void os_state_indicate(void) {
+__attribute__((weak)) void os_state_indicate(void) {
 #    if defined(NUM_LOCK_INDEX)
     if (host_keyboard_led_state().num_lock) {
         SET_LED_ON(NUM_LOCK_INDEX);
@@ -558,19 +558,25 @@ bool LED_INDICATORS_KB(void) {
    return false;
 }
 
-bool led_update_user(led_t led_state) {
-    if (!LED_DRIVER_IS_ENABLED()) {
-#    if defined(LED_MATRIX_DRIVER_SHUTDOWN_ENABLE) || defined(RGB_MATRIX_DRIVER_SHUTDOWN_ENABLE)
-        LED_DRIVER.exit_shutdown();
-#    endif
-        SET_ALL_LED_OFF();
-        os_state_indicate();
-        LED_DRIVER.flush();
-#    if defined(LED_MATRIX_DRIVER_SHUTDOWN_ENABLE) || defined(RGB_MATRIX_DRIVER_SHUTDOWN_ENABLE)
-        if (LED_DRIVER_ALLOW_SHUTDOWN()) LED_DRIVER.shutdown();
-#    endif
+bool led_update_kb(led_t led_state) {
+    bool res = led_update_user(led_state);
+    if (res) {
+        led_update_ports(led_state);
+
+        if (!LED_DRIVER_IS_ENABLED()) {
+    #    if defined(LED_MATRIX_DRIVER_SHUTDOWN_ENABLE) || defined(RGB_MATRIX_DRIVER_SHUTDOWN_ENABLE)
+            LED_DRIVER.exit_shutdown();
+    #    endif
+            SET_ALL_LED_OFF();
+            os_state_indicate();
+            LED_DRIVER.flush();
+    #    if defined(LED_MATRIX_DRIVER_SHUTDOWN_ENABLE) || defined(RGB_MATRIX_DRIVER_SHUTDOWN_ENABLE)
+            if (LED_DRIVER_ALLOW_SHUTDOWN()) LED_DRIVER.shutdown();
+    #    endif
+        }
     }
-    return true;
+
+    return res;
 }
 
 void LED_NONE_INDICATORS_KB(void) {

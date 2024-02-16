@@ -1,6 +1,6 @@
 # Keychron K7 Pro
 
-![Keychron K7 Pro](https://cdn.shopify.com/s/files/1/0059/0630/1017/t/5/assets/keychron-k7-pro-camerashot-photo-1-1676860139452.jpg?v=1676860142)
+![Keychron K7 Pro](https://github.com/Keychron/ProductImage/blob/main/K_Pro/k7_pro.jpg?raw=true)
 
 A customizable 68 keys TKL low profile switch keyboard.
 
@@ -11,10 +11,16 @@ A customizable 68 keys TKL low profile switch keyboard.
 Make example for this keyboard (after setting up your build environment):
 
     make keychron/k7_pro/ansi/rgb:default
+    make keychron/k7_pro/ansi/white:default
+    make keychron/k7_pro/iso/rgb:default
+    make keychron/k7_pro/iso/white:default
 
 Flashing example for this keyboard:
 
     make keychron/k7_pro/ansi/rgb:default:flash
+    make keychron/k7_pro/ansi/white:default:flash
+    make keychron/k7_pro/ansi/iso:default:flash
+    make keychron/k7_pro/ansi/white:default:flash
 
 **Reset Key**: Connect the USB cable, toggle mode switch to "Off", hold down the *Esc* key or reset button underneath space bar, then toggle then switch to "Cable".
 

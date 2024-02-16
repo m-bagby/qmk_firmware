@@ -1,6 +1,6 @@
 # Keychron K10 Pro
 
-![Keychron K10 Pro](https://cdn.shopify.com/s/files/1/0059/0630/1017/t/5/assets/keychronk10pro1-1675418457918.jpg?v=1675418462)
+![Keychron K10 Pro](https://github.com/Keychron/ProductImage/blob/main/K_Pro/k10_pro.jpg?raw=true)
 
 A customizable 108 keys keyboard.
 
@@ -11,10 +11,20 @@ A customizable 108 keys keyboard.
 Make example for this keyboard (after setting up your build environment):
 
     make keychron/k10_pro/ansi/rgb:default
+    make keychron/k10_pro/ansi/white:default
+    make keychron/k10_pro/iso/rgb:default
+    make keychron/k10_pro/iso/white:default
+    make keychron/k10_pro/jis/rgb:default
+    make keychron/k10_pro/jis/white:default
 
 Flashing example for this keyboard:
 
     make keychron/k10_pro/ansi/rgb:default:flash
+    make keychron/k10_pro/ansi/white:default:flash
+    make keychron/k10_pro/iso/rgb:default:flash
+    make keychron/k10_pro/iso/white:default:flash
+    make keychron/k10_pro/jis/rgb:default:flash
+    make keychron/k10_pro/jis/white:default:flash
 
 **Reset Key**: Connect the USB cable, toggle mode switch to "Off", hold down the *Esc* key or reset button underneath space bar, then toggle then switch to "Cable".
 

@@ -27,7 +27,7 @@
 #    define RGB_MATRIX_LED_COUNT (DRIVER_1_LED_COUNT + DRIVER_2_LED_COUNT)
 
 /* Set to infinit, which is use in USB mode by default */
-#define RGB_MATRIX_TIMEOUT RGB_MATRIX_TIMEOUT_INFINITE
+#    define RGB_MATRIX_TIMEOUT RGB_MATRIX_TIMEOUT_INFINITE
 
 /* Allow shutdown of led driver to save power */
 #    define RGB_MATRIX_DRIVER_SHUTDOWN_ENABLE
@@ -99,6 +99,7 @@
 #    define ENABLE_RGB_MATRIX_SOLID_MULTISPLASH   // Hue & value pulse away from multiple key hits then fades value out
 
 /* Set LED driver current */
-#    define CKLED2001_CURRENT_TUNE   {0x38, 0x38, 0x38, 0x38, 0x38, 0x38, 0x38, 0x38, 0x38, 0x38, 0x38, 0x38}
+#    define CKLED2001_CURRENT_TUNE \
+        { 0x38, 0x38, 0x38, 0x38, 0x38, 0x38, 0x38, 0x38, 0x38, 0x38, 0x38, 0x38 }
 
 #endif

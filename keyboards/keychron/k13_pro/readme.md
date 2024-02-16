@@ -1,10 +1,12 @@
 # Keychron K13 Pro
 
+![Keychron K13 Pro](https://github.com/Keychron/ProductImage/blob/main/K_Pro/k13_pro.jpg?raw=true)
+
 A customizable 80% TKL keyboard.
 
 * Keyboard Maintainer: [Keychron](https://github.com/keychron)
-* Hardware Supported: Keychron K1 Pro
-* Hardware Availability: [Keychron](https://www.keychron.com)
+* Hardware Supported: Keychron K13 Pro
+* Hardware Availability: [Keychron K13 Pro]()
 
 Make example for this keyboard (after setting up your build environment):
 
