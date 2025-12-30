@@ -25,18 +25,17 @@ HSV SOLID_SPLASH_math(HSV hsv, int16_t dx, int16_t dy, uint8_t dist, uint16_t ti
     }
     int secondaryHue = (int)hsv.s; //Secondary color is saturation setting
 
-    int hueDifference = primaryHue - secondaryHue;
-    int hueShift;
-
-    if (hueDifference < 128 && hueDifference > -128) {
-      hueShift = - hueDifference;
-    }
-    else if (hueDifference > 0) {
-      hueShift = 255 - hueDifference;
-    }
-    else {
-      hueShift = -(255 + hueDifference);
-    }
+//     int hueDifference = primaryHue - secondaryHue;
+//     int hueShift;
+//     if (hueDifference < 128 && hueDifference > -128) {
+//       hueShift = - hueDifference;
+//     }
+//     else if (hueDifference > 0) {
+//       hueShift = 255 - hueDifference;
+//     }
+//     else {
+//       hueShift = -(255 + hueDifference);
+//     }
     hsv.s = 255;
 
 
@@ -47,11 +46,12 @@ HSV SOLID_SPLASH_math(HSV hsv, int16_t dx, int16_t dy, uint8_t dist, uint16_t ti
 
     //Get percent (0 - 1) of effect strength
     //effect 0 - 255 -> strength 0 - 1
-    double strength = 0;
-    double normalStrength = qadd8(0, 255 - effect);
-    if (normalStrength != 0) {
-        strength = normalStrength / 255;
-    }
+//     double strength = 0;
+//     double normalStrength = qadd8(0, 255 - effect);
+//     if (normalStrength != 0) {
+//         strength = normalStrength / 255;
+//     }
+    uint8_t strength = 255 - effect;
 
 
     //Set color
@@ -62,22 +62,30 @@ HSV SOLID_SPLASH_math(HSV hsv, int16_t dx, int16_t dy, uint8_t dist, uint16_t ti
 
     //We want maximum change to be hueShift and minimum change to be zero
     //Positive hue shift to secondary color
-    if (hueShift > 0) {
-         hsv.h += (strength * hueShift);
-    }
-    //Negative hue shift to secondary color
-    else {
-    hueShift *= -1;
-         hsv.h -= (strength * hueShift);
+//     if (hueShift > 0) {
+//          hsv.h += (strength * hueShift);
+//     }
+//     //Negative hue shift to secondary color
+//     else {
+//     hueShift *= -1;
+//          hsv.h -= (strength * hueShift);
+//     }
+    if (strength > 0) {
+        int8_t hueDiff = (int8_t)(secondaryHue - primaryHue);
+        int8_t currentShift = (int8_t)scale8(abs(hueDiff), strength);
+        if (hueDiff < 0) currentShift = -currentShift;
+        hsv.h = primaryHue + currentShift;
     }
 
     //Set brightness
     //I want a lower background brightness with pressed keys starting at secondary color bright
     //then dimming with their hue shift back to the background brightness
-    uint8_t brightness = (uint8_t)(minBrightness);
-    brightness += (strength * (maxBrightness - minBrightness));
-    hsv.v = brightness;
-
+//     uint8_t brightness = (uint8_t)(minBrightness);
+//     brightness += (strength * (maxBrightness - minBrightness));
+//     hsv.v = brightness;
+    uint8_t headroom = maxBrightness - minBrightness;
+    uint8_t brightnessShift = scale8(headroom, strength);
+    hsv.v = qadd8(minBrightness, brightnessShift);
 
     return hsv;
 
