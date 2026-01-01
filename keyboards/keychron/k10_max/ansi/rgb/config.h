@@ -41,7 +41,7 @@
 
 /* Indications */
 // #    define NUM_LOCK_INDEX 36
-#    define CAPS_LOCK_INDEX 61
+#    define CAPS_LOCK_INDEX 59
 
 /* RGB Matrix Animation modes. Explicitly enabled
  * For full list of effects, see:
